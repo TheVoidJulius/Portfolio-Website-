@@ -222,8 +222,6 @@ nav.top i{font-style:normal;color:var(--plum);margin-right:6px}
 .now span:only-child{animation:none;opacity:1}
 .now span:nth-child(2){animation-delay:4s}.now span:nth-child(3){animation-delay:8s}.now span:nth-child(4){animation-delay:12s}
 @keyframes now{0%{opacity:0;transform:translateX(-6px)}3%,22%{opacity:1;transform:none}25%,100%{opacity:0}}
-.pcount{position:absolute;left:calc(48px + var(--d)*.12);bottom:var(--pad);z-index:2;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.pcount span{opacity:.45}
  
 .pn{display:flex;justify-content:space-between;gap:12px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:clamp(14px,2.6vw,36px)}
 .big{font:500 clamp(54px,10.5vw,170px)/.84 var(--sans);letter-spacing:-.065em;text-transform:uppercase;margin-left:-.04em}
@@ -251,11 +249,6 @@ nav.top i{font-style:normal;color:var(--plum);margin-right:6px}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .more,.lis summary{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;padding-bottom:3px;border-bottom:1px solid currentColor;transition:color .25s}
 .more:hover,.lis summary:hover{color:var(--plum)}
-.lis{position:relative;width:100%;min-height:152px;margin-top:12px}
-.lis::before{content:"Loading Spotify player… if this stays blank, open the file in Chrome or Edge";position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;border:1px dashed var(--line);font:500 11px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.6}.lis summary{display:inline-block;list-style:none;cursor:inherit}
-.lis summary::-webkit-details-marker{display:none}
-.lis iframe{display:block;position:relative;z-index:1;width:100%;height:152px;border:0;filter:grayscale(1);transition:filter .3s}
-.lis iframe:hover{filter:none}
  
 /* single-player switcher (CSS-only radios) */
 .rd{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
@@ -323,6 +316,26 @@ html.mv .sec h2,html.mv .big,html.mv .card h3,html.mv .links a b,html.mv .hello,
 .about{content-visibility:auto;contain-intrinsic-size:auto 700px}
 [data-off],[data-off] *{animation-play-state:paused!important}
  
+/* ---------- MUSIC DOCK ---------- */
+.cnt{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.6}
+.pp{all:unset;box-sizing:border-box;cursor:inherit;border:1px solid var(--ink);padding:8px 12px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);transition:background .25s,border-color .25s}
+.pp:hover{background:var(--plum);border-color:var(--plum)}
+.pp:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+.pp .b{display:none}html.playing .pp .a{display:none}html.playing .pp .b{display:inline}
+.lp{animation-play-state:paused}html.playing .lp{animation-play-state:running}
+.hub .eq i{animation-play-state:paused}html.playing .hub .eq i{animation-play-state:running}
+.dock{display:none;position:fixed;right:clamp(10px,2vw,24px);bottom:clamp(10px,2vw,24px);z-index:90;width:clamp(230px,24vw,320px);background:var(--paper);border:1px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+html.dock-on .dock{display:block;animation:fadein .4s both}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--ink);font:500 10px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.dh b{font-weight:500;display:inline-block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.dh button{all:unset;cursor:inherit;padding:2px 6px;border:1px solid var(--ink)}
+.dh button:hover{background:var(--ink);color:var(--paper)}
+.df{aspect-ratio:16/9;background:#000}
+.dock.sp .df{aspect-ratio:auto;height:152px}
+.df iframe{display:block;width:100%;height:100%;border:0}
+.dfb{display:block;padding:8px 10px;border-top:1px solid var(--ink);font:500 10px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:background .25s,color .25s}
+.dfb:hover{background:var(--ink);color:var(--paper)}
+ 
 /* ---------- CONTACT ---------- */
 .hello{padding:clamp(28px,5vw,64px) var(--pad) 0;font:400 clamp(44px,10vw,160px)/1 var(--hand);display:flex;gap:.3em;align-items:baseline;flex-wrap:wrap}
 .hello .cycle{color:var(--ink);filter:var(--rough)}
@@ -349,7 +362,7 @@ html.mv .sec h2,html.mv .big,html.mv .card h3,html.mv .links a b,html.mv .hello,
   .grid,.about{grid-template-columns:1fr}
   .panel{--d:300px;min-height:0;padding:calc(90px + var(--d)*.52 + 28px) var(--pad) var(--pad)}
   .vinyl{left:50%;margin-left:calc(var(--d)/-2);top:calc(var(--d)/-2 + 90px);margin-top:0}
-  .pcount{display:none}
+  
   .trk{grid-template-columns:20px 30px 1fr auto}
   .card{border-right:0;min-height:0}.plate{margin-right:0}.kanji{top:56px}
   .about aside{border-right:0;border-bottom:1px solid var(--line)}
@@ -543,38 +556,32 @@ html.mv .sec h2,html.mv .big,html.mv .card h3,html.mv .links a b,html.mv .hello,
       </div>
       <div class="dwrap">
         <div class="detail d1">
-          <div class="pcount">Track 01 <span>/ 03</span></div>
           <div class="pn"><span>P/P</span><span>01 / 03 · English · 英語 · अंग्रेज़ी</span></div>
           <h3 class="big">TAME<br>IMPALA</h3>
           <div class="genre">Psychedelic pop, rock, disco, synth-pop</div>
           <div class="tri2">テーム・インパラ · टेम इम्पाला</div>
-          <div class="foot"><a class="more" href="https://open.spotify.com/track/0mHoYdQ04Jd4XZ2n8VRNep" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener">View artist ↗</a></div>
-          <div class="lis"><iframe src="https://open.spotify.com/embed/track/0mHoYdQ04Jd4XZ2n8VRNep" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Tame Impala — The Less I Know The Better"></iframe></div>
+          <div class="foot"><button class="pp" type="button" data-i="0"><span class="a">▶ Play</span><span class="b">❚❚ Pause</span></button><a class="more" href="https://open.spotify.com/track/0mHoYdQ04Jd4XZ2n8VRNep" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener">View artist ↗</a></div>
         </div>
         <div class="detail d2">
-          <div class="pcount">Track 02 <span>/ 03</span></div>
           <div class="pn"><span>P/P</span><span>02 / 03 · 日本語 · जापानी · Japanese</span></div>
           <h3 class="big l">MARIYA<br>TAKEUCHI</h3>
           <div class="genre">City pop, J-pop, disco, funk, soul</div>
           <div class="tri2">竹内まりや · मारिया ताकेउची</div>
-          <div class="foot"><a class="more" href="https://open.spotify.com/track/7rU6Iebxzlvqy5t857bKFq" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/3WwGRA2o4Ux1RRMYaYDh7N" target="_blank" rel="noopener">View artist ↗</a></div>
-          <div class="lis"><iframe src="https://open.spotify.com/embed/track/7rU6Iebxzlvqy5t857bKFq" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Mariya Takeuchi — Plastic Love"></iframe></div>
+          <div class="foot"><button class="pp" type="button" data-i="1"><span class="a">▶ Play</span><span class="b">❚❚ Pause</span></button><a class="more" href="https://open.spotify.com/track/7rU6Iebxzlvqy5t857bKFq" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/3WwGRA2o4Ux1RRMYaYDh7N" target="_blank" rel="noopener">View artist ↗</a></div>
         </div>
         <div class="detail d3">
-          <div class="pcount">Track 03 <span>/ 03</span></div>
           <div class="pn"><span>P/P</span><span>03 / 03 · English · 英語 · अंग्रेज़ी</span></div>
           <h3 class="big m">MALCOLM<br>TODD</h3>
           <div class="genre">Bedroom pop, indie, alternative</div>
           <div class="tri2">マルコム・トッド · मैल्कम टॉड</div>
-          <div class="foot"><a class="more" href="https://open.spotify.com/track/77Jy02wGI2iU5HCcynsBmS" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/7eKkW1zo5uzW8kUntiiBvz" target="_blank" rel="noopener">View artist ↗</a></div>
-          <div class="lis"><iframe src="https://open.spotify.com/embed/track/77Jy02wGI2iU5HCcynsBmS" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Malcolm Todd — Obsessica"></iframe></div>
+          <div class="foot"><button class="pp" type="button" data-i="2"><span class="a">▶ Play</span><span class="b">❚❚ Pause</span></button><a class="more" href="https://open.spotify.com/track/77Jy02wGI2iU5HCcynsBmS" target="_blank" rel="noopener">Open song ↗</a><a class="more" href="https://open.spotify.com/artist/7eKkW1zo5uzW8kUntiiBvz" target="_blank" rel="noopener">View artist ↗</a></div>
         </div>
       </div>
-      <div class="pop">Popular <small>人気 · लोकप्रिय · pick a track</small></div>
+      <div class="pop">Popular <small>人気 · लोकप्रिय · pick a track</small><span class="cnt">03 tracks</span></div>
       <div class="tl">
-        <label class="trk" for="s1"><i>01</i><span class="cov a1"></span><span><b>The Less I Know The Better</b><em>Tame Impala · Currents</em></span><i>2015</i></label>
-        <label class="trk" for="s2"><i>02</i><span class="cov a4"></span><span><b>Plastic Love (プラスティック・ラブ)</b><em>Mariya Takeuchi · Variety</em></span><i>1984</i></label>
-        <label class="trk" for="s3"><i>03</i><span class="cov a8"></span><span><b>Obsessica</b><em>Malcolm Todd · Do That Again</em></span><i>2026</i></label>
+        <label class="trk" for="s1" data-sp="0mHoYdQ04Jd4XZ2n8VRNep" data-yt="2SUwOgmvzK4" data-t="The Less I Know The Better"><i>01</i><span class="cov a1"></span><span><b>The Less I Know The Better</b><em>Tame Impala · Currents</em></span><i>2015</i></label>
+        <label class="trk" for="s2" data-sp="7rU6Iebxzlvqy5t857bKFq" data-yt="T_lC2O1oIew" data-t="Plastic Love"><i>02</i><span class="cov a4"></span><span><b>Plastic Love (プラスティック・ラブ)</b><em>Mariya Takeuchi · Variety</em></span><i>1984</i></label>
+        <label class="trk" for="s3" data-sp="77Jy02wGI2iU5HCcynsBmS" data-yt="OerWPMlu4VI" data-t="Obsessica"><i>03</i><span class="cov a8"></span><span><b>Obsessica</b><em>Malcolm Todd · Do That Again</em></span><i>2026</i></label>
       </div>
     </section>
  
@@ -592,6 +599,12 @@ html.mv .sec h2,html.mv .big,html.mv .card h3,html.mv .links a b,html.mv .hello,
   <div class="legal"><span>© 2026 Pushkar Panwar · プシュカル · पुष्कर</span><a href="#top">Back to top ↑ · 上へ</a></div>
 </div>
  
+<!-- Music dock. To enable FULL songs for everyone: paste each song's YouTube link into data-yt="" on its <label class="trk"> above. -->
+<aside class="dock" id="dock" aria-label="Music player">
+  <div class="dh"><span>♪ <b id="dname">—</b></span><button id="dclose" type="button" aria-label="Close player">✕</button></div>
+  <div class="df" id="dframe"></div>
+  <a class="dfb" id="dalt" href="#" target="_blank" rel="noopener">Open on Spotify ↗</a>
+</aside>
 <script>
 (()=>{
   const root=document.documentElement,$=q=>document.querySelector(q),
@@ -616,6 +629,49 @@ html.mv .sec h2,html.mv .big,html.mv .card h3,html.mv .links a b,html.mv .hello,
   /* PERF: pause animations that are off-screen */
   const io=new IntersectionObserver(es=>es.forEach(e=>e.target.toggleAttribute('data-off',!e.isIntersecting)),{rootMargin:'120px'});
   document.querySelectorAll('.cover,.poster,.marquee,.panel').forEach(el=>io.observe(el));
+ 
+  /* MUSIC DOCK: one persistent player that keeps playing while people browse. YouTube (full songs) when data-yt is set, else Spotify embed */
+  const dock=$('#dock'),dframe=$('#dframe'),dname=$('#dname'),dalt=$('#dalt'),trks=[...document.querySelectorAll('.trk')],
+        ytId=v=>{const m=(v||'').match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})|^([\w-]{11})$/);return m&&(m[1]||m[2])},
+        spUrl=l=>'https://open.spotify.com/track/'+l.dataset.sp;
+  let yt=null,ytReady=false,apiAsked=false,cur=-1,want=-1;
+  const loadAPI=()=>{if(apiAsked)return;apiAsked=true;const x=document.createElement('script');x.src='https://www.youtube.com/iframe_api';document.head.append(x)};
+  window.onYouTubeIframeAPIReady=()=>{ytReady=true;if(want>-1){const i=want;want=-1;play(i)}};
+  if(trks.some(l=>ytId(l.dataset.yt)))addEventListener('load',()=>setTimeout(loadAPI,1200));
+  function play(i){
+    const l=trks[i],id=ytId(l.dataset.yt);
+    cur=i;dname.textContent=l.dataset.t;dalt.href=spUrl(l);root.classList.add('dock-on');
+    if(id){
+      dock.classList.remove('sp');dalt.textContent='Open on Spotify ↗';
+      if(!ytReady){want=i;loadAPI();return}
+      if(yt)yt.loadVideoById(id);
+      else{
+        dframe.innerHTML='<div id="ytp"></div>';
+        yt=new YT.Player('ytp',{width:'100%',height:'100%',videoId:id,playerVars:{autoplay:1,playsinline:1,rel:0,modestbranding:1},events:{
+          onReady:e=>e.target.playVideo(),
+          onStateChange:e=>{const st=e.data;
+            if(st===1)root.classList.add('playing');
+            else if(st===2||st===0){root.classList.remove('playing');
+              if(st===0&&cur<trks.length-1){const n=cur+1;$('#s'+(n+1)).checked=true;play(n)}}},
+          onError:()=>{dalt.textContent='Can’t embed this video · open on Spotify ↗'}}});
+      }
+    }else{
+      if(yt){try{yt.destroy()}catch(e){}yt=null}
+      dock.classList.add('sp');dalt.textContent='Open the full song on Spotify ↗';
+      dframe.innerHTML='<iframe src="https://open.spotify.com/embed/track/'+l.dataset.sp+'" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="'+l.dataset.t+'"></iframe>';
+      root.classList.add('playing');
+    }
+  }
+  const toggle=i=>{
+    if(i===cur&&yt&&ytId(trks[i].dataset.yt))root.classList.contains('playing')?yt.pauseVideo():yt.playVideo();
+    else play(i);
+  };
+  trks.forEach((l,i)=>l.addEventListener('click',()=>toggle(i)));
+  document.querySelectorAll('.pp').forEach(b=>b.addEventListener('click',()=>toggle(+b.dataset.i)));
+  $('#dclose').addEventListener('click',()=>{
+    if(yt)yt.pauseVideo();else dframe.innerHTML='';
+    root.classList.remove('dock-on','playing');
+  });
  
   if(reduced||!root.getAnimations)return;
  
